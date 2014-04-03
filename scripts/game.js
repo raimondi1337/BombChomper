@@ -1,12 +1,26 @@
-window.onload = init;
+"use strict";
 
 var app = app || {};
 
-function init(){
-	setupCanvas();
+app.game = {
+	canvas : undefined,
+	ctx :  undefined,
 
-	update();
-	
+}
+
+	init : function() {
+		this.canvas = document.querySelector('canvas');
+		this.context = this.canvas.getContext('2d');
+
+		this.canvas.style.position="absolute";
+		this.canvas.style.top="0";
+		this.canvas.style.left="0";
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+
+		this.context.fillStyle = "#222222";
+		this.context.fillRect(0,0,canvas.width,canvas.height);
+		
 	window.onblur = function(){
 		paused = true;
 		cancelAnimationFrame(animationID);
@@ -19,12 +33,8 @@ function init(){
 		paused = false;
 		update();
 	};
-}
+	
+	}
+};
 
-function setupCanvas(){
-	canvas.style.position="absolute";
-	canvas.style.top="0";
-	canvas.style.left="0";
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-}
+window.onload = app.game.init;
