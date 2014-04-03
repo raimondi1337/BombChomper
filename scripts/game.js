@@ -6,6 +6,19 @@ function init(){
 	setupCanvas();
 
 	update();
+	
+	window.onblur = function(){
+		paused = true;
+		cancelAnimationFrame(animationID);
+		//call update() once so that our paused screen
+		//gets drawn
+		update();
+	};
+	
+	window.onfocus = function(){
+		paused = false;
+		update();
+	};
 }
 
 function setupCanvas(){
