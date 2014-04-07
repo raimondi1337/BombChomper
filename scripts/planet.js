@@ -5,12 +5,12 @@ app.Planet = function(){
 
 	function Planet(x,y){
 		// ivars - unique for every instance
-		this.x = x;
-		this.y = y;
+		this.x = ;
+		this.y = ;
 		this.health = 5;
-		this.width = 3;
-		this.height = 3;
-		this.color = "#FFF";
+		this.width = canvas.width;
+		this.height = canvas.height - 100;
+		this.color = "green";
 	} // end Bullet Constructor
 	
 	
@@ -24,7 +24,14 @@ app.Planet = function(){
 
 	p.draw = function(ctx) {
 		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.width, this.height);
+		ctx.beginPath();
+		ctx.arc(288, 75, 70, 0, Math.PI, false);
+		ctx.closePath();
+		ctx.lineWidth = 5;
+		ctx.fillStyle = 'red';
+		ctx.fill();
+		ctx.strokeStyle = '#550000';
+		ctx.stroke();
 	};
 	
 	return Planet; 
