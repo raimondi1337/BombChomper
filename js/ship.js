@@ -12,15 +12,6 @@ app.ship = {
 	height: 42,
 	speed: window.innerWidth/3,
 	image: undefined,
-	exhaust: undefined,
-	init: function(){
-		this.exhaust = new app.Emitter();
-		this.exhaust.numParticles = 100;
-		this.exhaust.red = 255;
-		this.exhaust.green = 150;
-		
-		this.exhaust.createParticles(this.emitterPoint());
-	},
 	
 	draw: function(ctx){
 		//ctx.fillRect() draws from the upper left of the x,y
@@ -42,8 +33,6 @@ app.ship = {
 		} else{
 			ctx.drawImage(this.image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 		}
-		
-		this.exhaust.updateAndDraw(ctx, this.emitterPoint());
 	},
 	
 	moveLeft: function(dt){
@@ -60,13 +49,5 @@ app.ship = {
 	
 	moveDown: function(dt){
 		this.y += this.speed * dt;
-	},
-	
-	emitterPoint : function(){
-		// 2 pixels underneath the bottom of the ship
-		return{
-			x:this.x,
-			y:this.y + this.height/2 + 2
-		};
 	}
 };

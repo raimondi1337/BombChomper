@@ -47,7 +47,6 @@ Modernizr.load(
 			'js/blastem.js',
 			'js/draw.js',
 			'js/ship.js',
-			'js/emitter.js',
 			'js/enemy.js',
 			'js/explosionSprite.js',
 			app.IMAGES['shipImage'], // ignore console error

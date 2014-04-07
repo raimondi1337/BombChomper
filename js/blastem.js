@@ -8,7 +8,6 @@ app.blastem = {
     	// CONSTANT properties
     	WIDTH : window.innerWidth, 
     	HEIGHT: window.innerHeight,
-		FIRE_RATE: 2,
     	ENEMY_PROBABILITY_PER_SECOND: 1.0,
     	
 		// variable properties
@@ -16,8 +15,6 @@ app.blastem = {
 		ctx :  undefined,
 		dt: 1/60.0, // "delta time"
 		ship: undefined,
-		pulsar: undefined,
-		playerBullets: [],
 		cooldown: 0,
 		enemies: [],
 		enemyImage: undefined,
@@ -43,7 +40,7 @@ app.blastem = {
 			
 			// set up player ship
 			this.ship = app.ship;
-			this.ship.init(); //  doesn't do anything yet
+			
 			//create an image object
 			var image = new Image();
 			
@@ -67,22 +64,6 @@ app.blastem = {
 			var image = new Image();
 			image.src = app.IMAGES['explosionImage3'];
 			this.explosionImage3 = image;
-			
-			// pulsar
-			this.pulsar = new app.Emitter();
-			this.pulsar.red = 255;
-			this.pulsar.minXspeed = this.pulsar.minYspeed = -0.25;
-			this.pulsar.maxXspeed = this.pulsar.maxYspeed = 0.25;
-			this.pulsar.lifetime = 500;
-			this.pulsar.expansionRate = 0.05;
-			this.pulsar.numParticles = 100;
-			this.pulsar.xRange = 1;
-			this.pulsar.yRange = 1;
-			this.pulsar.useCircles = false;
-			this.pulsar.useSquares = true;
-			
-			// 100,100 is where the particles will appear
-			this.pulsar.createParticles({x:100,y:100});
 			
 			// draw the screen once
 			this.update();
@@ -137,7 +118,6 @@ app.blastem = {
 	
 	drawSprites : function (){
 		this.ship.draw(this.ctx); // the player knows how to draw itself
-		this.pulsar.updateAndDraw(this.ctx,{x:100,y:100});
 		
 		//draw enemies
 		for(var i=0; i < this.enemies.length; i++){

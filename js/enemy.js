@@ -13,7 +13,6 @@ app.Enemy = function(){
 		this.y = 0;
 		this.xVelocity = 0;
 		this.yVelocity = 5;
-		this.amplitude = app.utilities.getRandom(1.5,7.0); // in utils.js
 		this.image = image;
 		this.width = 34;
 		this.height = 40;
@@ -42,8 +41,6 @@ app.Enemy = function(){
 	};
 	
 	p.update = function(dt){
-		this.xVelocity = this.amplitude * Math.sin(this.age * Math.PI * dt);
-		this.x += this.xVelocity;
 		this.y += this.yVelocity;
 		this.age++;
 		this.active = this.active && inBounds(this);
