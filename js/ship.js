@@ -10,7 +10,7 @@ app.ship = {
 	y: 420,
 	width: 34,
 	height: 42,
-	speed: 250,
+	speed: window.innerWidth/3,
 	image: undefined,
 	exhaust: undefined,
 	init: function(){

@@ -6,8 +6,8 @@ var app = app || {};
 
 app.blastem = {
     	// CONSTANT properties
-    	WIDTH : 640, 
-    	HEIGHT: 480,
+    	WIDTH : window.innerWidth, 
+    	HEIGHT: window.innerHeight,
 		FIRE_RATE: 2,
     	ENEMY_PROBABILITY_PER_SECOND: 1.0,
     	
@@ -31,6 +31,9 @@ app.blastem = {
 		
     	init : function() {
 			this.canvas = document.querySelector('canvas');
+			this.canvas.style.position = "absolute";
+			this.canvas.style.top = "0";
+			this.canvas.style.left = "0";
 			this.canvas.width = this.WIDTH;
 			this.canvas.height = this.HEIGHT;
 			
@@ -133,10 +136,6 @@ app.blastem = {
 	
 	
 	drawSprites : function (){
-		//draw bullets
-		for(var i=0; i < this.playerBullets.length; i++){
-			this.playerBullets[i].draw(this.ctx);
-		}
 		this.ship.draw(this.ctx); // the player knows how to draw itself
 		this.pulsar.updateAndDraw(this.ctx,{x:100,y:100});
 		
@@ -172,26 +171,7 @@ app.blastem = {
 		var paddingY = this.ship.height/2;
 		this.ship.x = app.utilities.clamp(this.ship.x, paddingX, this.WIDTH - paddingX);
 		this.ship.y = app.utilities.clamp(this.ship.y, paddingY, this.HEIGHT - paddingY);
-		
-		//Part B
-		//Fire Bullets
-		this.cooldown--;
-		//poll keyboard
-		if(this.cooldown <= 0 && app.keydown[app.KEYBOARD.KEY_SPACE]){
-			this.shoot(this.ship.x,this.ship.y);
-			this.cooldown = 60/this.FIRE_RATE; // assuming 60 FPS here
-		}
-		
-		//move bullets
-		for(var i=0; i< this.playerBullets.length; i++){
-			this.playerBullets[i].update(this.dt);
-		}
-		
-		//array.filter() returns a new array with only active bullets
-		this.playerBullets = this.playerBullets.filter(function(bullet){
-			return bullet.active;
-		});
-		
+				
 		//Enemy
 		
 		for(var i=0; i<this.enemies.length; i++){
@@ -220,36 +200,17 @@ app.blastem = {
 		});
 	},
 	
-	shoot: function(x,y){
-		console.log("Bang!");
-		this.playerBullets.push(new app.Bullet(x,y,200));
-		createjs.Sound.play("bullet");
-	},
-	
 	checkForCollisions: function(){
 		//"this" becomes undefined in a foreach loop
 		// self will preserve "this" i.e. app.blastum
 		var self = this;
-		
-		//bullets v. enemies
-		this.playerBullets.forEach(function(bullet){
-			self.enemies.forEach(function(enemy){
-				if(self.collides(bullet, enemy)){
-					enemy.active = false;
-					//enemy.explode();
-					bullet.active = false;
-					self.score++;
-					self.createExplosion(enemy.x,enemy.y,-enemy.xVelocity/4,-enemy.yVelocity/4);
-				}// end if
-			});// end forEach enemy
-		});// end ofEach bullet
-		
+				
 		//enemies v ship
 		this.enemies.forEach(function(enemy){
 			if(self.collides(enemy, self.ship)){
 				enemy.explode();
 				//self.ship.explode();
-				self.score -= 5;
+				self.score += 5;
 				self.createExplosion(enemy.x,enemy.y,-enemy.xVelocity/4,-enemy.yVelocity/4);
 			}
 		});

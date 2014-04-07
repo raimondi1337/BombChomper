@@ -15,8 +15,7 @@ app.KEYBOARD = {
 	"KEY_LEFT": 37, 
 	"KEY_UP": 38, 
 	"KEY_RIGHT": 39, 
-	"KEY_DOWN": 40,
-	"KEY_SPACE": 32
+	"KEY_DOWN": 40
 };
 
 app.IMAGES = {
@@ -49,7 +48,6 @@ Modernizr.load(
 			'js/draw.js',
 			'js/ship.js',
 			'js/emitter.js',
-			'js/bullet.js',
 			'js/enemy.js',
 			'js/explosionSprite.js',
 			app.IMAGES['shipImage'], // ignore console error
@@ -97,7 +95,6 @@ Modernizr.load(
 			//Firefox and Opera will load "music.ogg"
 			//Browsers with MP3 support will load "music.mp3"
 			createjs.Sound.alternateExtensions = ["mp3"];
-			createjs.Sound.registerSound({id:"bullet", src:"sounds/laser4.ogg"});
 			createjs.Sound.registerSound({id:"explosion", src:"sounds/fireball4.ogg"});
 			createjs.Sound.registerSound({id:"soundtrack", src:"sounds/soundtrack.ogg"});
 			
