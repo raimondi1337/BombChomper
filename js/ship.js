@@ -4,14 +4,19 @@
 "use strict";
 var app = app || {};
 
+var dtr = function(degrees){
+	return degrees * Math.PI / 180; 
+}
 app.ship = {
 	color: "yellow",
 	x: 320,
 	y: 420,
 	width: 34,
 	height: 42,
+	angle: 0,
 	speed: window.innerWidth/3,
 	image: undefined,
+	
 	
 	draw: function(ctx){
 		//ctx.fillRect() draws from the upper left of the x,y
@@ -29,25 +34,41 @@ app.ship = {
 		var destHeight = this.height;
 		
 		if(!this.image){
-			app.draw.rect(ctx, this.x - halfW, this.y - halfH, this.width, this.height, this.color);
+			ctx.save();
+			ctx.translate(this.x+halfW,this.y+halfH);
+			ctx.rotate(dtr(this.angle));
+							
+			app.draw.rect(ctx, 0-halfW, 0-halfH, this.width, this.height, this.color);
+			
+			ctx.restore();
 		} else{
 			ctx.drawImage(this.image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
 		}
 	},
 	
 	moveLeft: function(dt){
-		this.x -= this.speed * dt;
+		this.angle -=2;
 	},
 	
 	moveRight: function(dt){
-		this.x += this.speed * dt;
+		this.angle +=2;
 	},
 	
 	moveUp: function(dt){
-		this.y -= this.speed * dt;
+		var rotAsRad = dtr(this.angle -90);
+			
+		// second, find the x component of the change
+		var vx =  Math.cos(rotAsRad) * this.speed;
+		
+		// third, find the y component of the change
+		var vy =  Math.sin(rotAsRad) * this.speed;
+		
+		// update the x and y of the player
+		this.x += vx * dt;
+		this.y += vy * dt;
 	},
 	
 	moveDown: function(dt){
-		this.y += this.speed * dt;
+		//this.y += this.speed * dt;
 	}
 };
