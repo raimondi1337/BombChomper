@@ -7,7 +7,7 @@ var app = app || {};
 var dtr = function(degrees){
 	return degrees * Math.PI / 180; 
 }
-app.ship = {
+app.player = {
 	color: "yellow",
 	x: 320,
 	y: 420,

@@ -1,10 +1,9 @@
-// blastem.js
+// bombchomp.js
 "use strict";
-// if app exists use the existing copy
-// else create a new object literal
+
 var app = app || {};
 
-app.blastem = {
+app.bombchomp = {
     	// CONSTANT properties
     	WIDTH : window.innerWidth, 
     	HEIGHT: window.innerHeight,
@@ -14,10 +13,10 @@ app.blastem = {
 		canvas : undefined,
 		ctx :  undefined,
 		dt: 1/60.0, // "delta time"
-		ship: undefined,
+		player: undefined,
 		cooldown: 0,
-		enemies: [],
-		enemyImage: undefined,
+		bombs: [],
+		bombImage: undefined,
 		score: 0,
 		
 		//Part C
@@ -38,19 +37,19 @@ app.blastem = {
 			// interact with the canvas api
 			this.ctx = this.canvas.getContext('2d');
 			
-			// set up player ship
-			this.ship = app.ship;
+			// set up player player
+			this.player = app.player;
 			
 			//create an image object
 			var image = new Image();
 			
-			//get the ship PNG - it was already loaded for us
-			image.src = app.IMAGES['shipImage'];
-			this.ship.image = image;
+			//get the player PNG - it was already loaded for us
+			image.src = app.IMAGES['playerImage'];
+			this.player.image = image;
 			
 			var image = new Image();
-			image.src = app.IMAGES['enemyImage'];
-			this.enemyImage = image;
+			image.src = app.IMAGES['bombImage'];
+			this.bombImage = image;
 			
 			//Part C
 			var image = new Image();
@@ -117,11 +116,11 @@ app.blastem = {
 	
 	
 	drawSprites : function (){
-		this.ship.draw(this.ctx); // the player knows how to draw itself
+		this.player.draw(this.ctx); // the player knows how to draw itself
 		
 		//draw enemies
-		for(var i=0; i < this.enemies.length; i++){
-			this.enemies[i].draw(this.ctx);
+		for(var i=0; i < this.bombs.length; i++){
+			this.bombs[i].draw(this.ctx);
 		};
 		
 		//draw explosions
@@ -133,38 +132,38 @@ app.blastem = {
 	moveSprites: function(){
 		//Ask "Key Daemon" which keys are down
 		if(app.keydown[app.KEYBOARD.KEY_LEFT]){
-			this.ship.moveLeft(this.dt);
+			this.player.moveLeft(this.dt);
 		}
 		if(app.keydown[app.KEYBOARD.KEY_RIGHT]){
-			this.ship.moveRight(this.dt);
+			this.player.moveRight(this.dt);
 		}
 		if(app.keydown[app.KEYBOARD.KEY_UP]){
-			this.ship.moveUp(this.dt);
+			this.player.moveUp(this.dt);
 		}
 		if(app.keydown[app.KEYBOARD.KEY_DOWN]){
-			this.ship.moveDown(this.dt);
+			this.player.moveDown(this.dt);
 		}
 		
-		//keep ship on screen
+		//keep player on screen
 		//clamp(val,min,max)
-		var paddingX = this.ship.width/2;
-		var paddingY = this.ship.height/2;
-		this.ship.x = app.utilities.clamp(this.ship.x, paddingX, this.WIDTH - paddingX);
-		this.ship.y = app.utilities.clamp(this.ship.y, paddingY, this.HEIGHT - paddingY);
+		var paddingX = this.player.width/2;
+		var paddingY = this.player.height/2;
+		this.player.x = app.utilities.clamp(this.player.x, paddingX, this.WIDTH - paddingX);
+		this.player.y = app.utilities.clamp(this.player.y, paddingY, this.HEIGHT - paddingY);
 				
 		//Enemy
 		
-		for(var i=0; i<this.enemies.length; i++){
-			this.enemies[i].update(this.dt);
+		for(var i=0; i<this.bombs.length; i++){
+			this.bombs[i].update(this.dt);
 		};
 		
 		//array filter() returns a new array with only active enemies
-		this.enemies = this.enemies.filter(function(enemy){
-			return enemy.active;
+		this.enemies = this.bombs.filter(function(bomb){
+			return bomb.active;
 		});
 		
 		if(Math.random() < this.ENEMY_PROBABILITY_PER_SECOND/60){
-			this.enemies.push(new app.Enemy(this.enemyImage,this.WIDTH, this.HEIGHT));
+			this.bombs.push(new app.Bomb(this.bombImage,this.WIDTH, this.HEIGHT));
 			
 			console.log("New Enemy created! enemies.length = " + this.enemies.length);
 		}
@@ -185,13 +184,13 @@ app.blastem = {
 		// self will preserve "this" i.e. app.blastum
 		var self = this;
 				
-		//enemies v ship
-		this.enemies.forEach(function(enemy){
-			if(self.collides(enemy, self.ship)){
-				enemy.explode();
-				//self.ship.explode();
+		//enemies v player
+		this.enemies.forEach(function(bomb){
+			if(self.collides(bomb, self.player)){
+				bomb.explode();
+				//self.player.explode();
 				self.score += 5;
-				self.createExplosion(enemy.x,enemy.y,-enemy.xVelocity/4,-enemy.yVelocity/4);
+				self.createExplosion(bomb.x,bomb.y,-bomb.xVelocity/4,-bomb.yVelocity/4);
 			}
 		});
 	},

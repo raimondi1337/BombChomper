@@ -1,6 +1,6 @@
 "use strict";
-app.Enemy = function(){
-	function Enemy(image,canvasWidth,canvasHeight){
+app.Bomb = function(){
+	function Bomb(image,canvasWidth,canvasHeight){
 		//ivars
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
@@ -18,7 +18,7 @@ app.Enemy = function(){
 		this.height = 40;
 	};
 	
-	var p = Enemy.prototype;
+	var p = Bomb.prototype;
 	
 	p.draw = function(ctx){
 		var halfW = this.width/2;
@@ -54,5 +54,5 @@ app.Enemy = function(){
 	function inBounds(obj){
 		return obj.y <= obj.canvasHeight + obj.height * 0.5;
 	};
-	return Enemy;
+	return Bomb;
 }();

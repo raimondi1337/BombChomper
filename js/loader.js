@@ -19,8 +19,8 @@ app.KEYBOARD = {
 };
 
 app.IMAGES = {
-    shipImage: "images/Hunter1.png",
-    enemyImage: "images/Drone1.png",
+    playerImage: "images/Hunter1.png",
+    bombImage: "images/Drone1.png",
 	explosionImage: "images/explosion.png",
 	explosionImage2: "images/explosion2.png",
 	explosionImage3: "images/explosion3.png"
@@ -44,13 +44,13 @@ Modernizr.load(
 		load : [
 			'js/polyfills.js',
 			'js/utilities.js',
-			'js/blastem.js',
+			'js/bombchomp.js',
 			'js/draw.js',
-			'js/ship.js',
-			'js/enemy.js',
+			'js/player.js',
+			'js/bomb.js',
 			'js/explosionSprite.js',
-			app.IMAGES['shipImage'], // ignore console error
-			app.IMAGES['enemyImage'], // ignore console error
+			app.IMAGES['playerImage'], // ignore console error
+			app.IMAGES['bombImage'], // ignore console error
 			app.IMAGES['explosionImage'],
 			app.IMAGES['explosionImage2'],
 			app.IMAGES['explosionImage3']
@@ -65,7 +65,7 @@ Modernizr.load(
 				cancelAnimationFrame(app.animationID);
 				app.keydown = []; // clear key daemon
 				// call update() so that our paused screen gets drawn
-				app.blastem.update();
+				app.bombchomp.update();
 				createjs.Sound.stop();
 			};
 			
@@ -73,8 +73,8 @@ Modernizr.load(
 				app.paused = false;
 				cancelAnimationFrame(app.animationID);
 				// start the animation back up
-				app.blastem.update();
-				app.blastem.startSoundtrack();
+				app.bombchomp.update();
+				app.bombchomp.startSoundtrack();
 			};
 			
 			// event listeners
@@ -101,11 +101,11 @@ Modernizr.load(
 			
 			function handleFileLoad(e){
 				console.log("Preloaded Sound:", e.id, e.src);
-				if(e.src == "sounds/soundtrack.ogg") app.blastem.startSoundtrack();
+				if(e.src == "sounds/soundtrack.ogg") app.bombchomp.startSoundtrack();
 			}
 			
 			// start game
-			app.blastem.init();
+			app.bombchomp.init();
 		} // end complete
 		
 	} // end object
