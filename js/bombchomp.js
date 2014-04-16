@@ -7,7 +7,7 @@ app.bombchomp = {
     	// CONSTANT properties
     	WIDTH : window.innerWidth, 
     	HEIGHT: window.innerHeight,
-    	ENEMY_PROBABILITY_PER_SECOND: 1.0,
+    	ENEMY_PROBABILITY_PER_SECOND: 0.5,
     	
 		// variable properties
 		canvas : undefined,
@@ -18,12 +18,15 @@ app.bombchomp = {
 		bombs: [],
 		bombImage: undefined,
 		score: 0,
-		
-		//Part C
+		planet: undefined,
 		explosions: [],
 		explosionImage: undefined,
 		explosionImage2: undefined,
-		explosionImage3: undefined,
+		GAME_STATE_BEGIN: 0,
+		GAME_STATE_PLAYING: 1,
+		GAME_STATE_OVER: 2,
+		gamestate: undefined,
+		space: undefined,
 		
     	init : function() {
 			this.canvas = document.querySelector('canvas');
@@ -40,12 +43,19 @@ app.bombchomp = {
 			// set up player player
 			this.player = app.player;
 			
+			//set up planet
+			this.planet = app.planet;
+			
 			//create an image object
 			var image = new Image();
 			
 			//get the player PNG - it was already loaded for us
 			image.src = app.IMAGES['playerImage'];
 			this.player.image = image;
+			
+			var image = new Image();
+			image.src = app.IMAGES['planetImage'];
+			this.planet.image = image;
 			
 			var image = new Image();
 			image.src = app.IMAGES['bombImage'];
@@ -61,8 +71,22 @@ app.bombchomp = {
 			this.explosionImage2 = image;
 			
 			var image = new Image();
-			image.src = app.IMAGES['explosionImage3'];
-			this.explosionImage3 = image;
+			image.src = app.IMAGES['spaceImage'];
+			this.space = image;
+			
+			this.gamestate = this.GAME_STATE_BEGIN;
+			var game = this;
+			
+			
+			window.addEventListener('keydown', function(event){
+				if(game.gamestate == game.GAME_STATE_BEGIN){
+					console.log(game.gamestate);
+					game.gamestate = game.GAME_STATE_PLAYING;
+				}
+				if(game.gamestate == game.GAME_STATE_OVER){
+					game.gamestate = game.GAME_STATE_BEGIN;
+				}
+			});
 			
 			// draw the screen once
 			this.update();
@@ -71,33 +95,41 @@ app.bombchomp = {
     	
     update: function(){
     	// clear screen
-    	
-    	app.draw.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
+		app.draw.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 		// PAUSED?
 		if (app.paused){
 			this.drawPauseScreen(this.ctx);
 			return;
 		 }
 	
-		// UPDATE
-		// move sprites
-		this.moveSprites();
-		
-		// CHECK FOR COLLISIONS	
-		this.checkForCollisions();
-		
+		// UPDATE		
 		// DRAW	
-		// i) draw background
-		app.draw.backgroundGradient(this.ctx,this.WIDTH,this.HEIGHT);
+		if(this.gamestate == this.GAME_STATE_BEGIN){
+			app.draw.start(this.ctx);
+		} // end if
 		
-		// ii) draw sprites
-		this.ctx.globalAlpha = 0.9;
-		this.drawSprites();
+		if(this.gamestate == this.GAME_STATE_OVER){
+			app.draw.gameover(this.ctx);
+			app.planet.health = 10;
+			this.score = 0;
+			this.bombs = [];
+		} // end 
 		
-		
-		// iii) draw HUD
-		this.ctx.globalAlpha = 1.0;
-		this.drawHUD();
+		if(this.gamestate == this.GAME_STATE_PLAYING){
+			// move sprites
+			this.moveSprites();
+			
+			// CHECK FOR COLLISIONS	
+			this.checkForCollisions();
+			this.ctx.drawImage(this.space,0,0,this.WIDTH, this.HEIGHT);
+			this.drawSprites();
+			
+			this.ctx.globalAlpha = 1.0;
+			this.drawHUD();
+			if(app.planet.health == 0){
+				this.gamestate = this.GAME_STATE_OVER;
+			}
+		}
 		
 		// LOOP
 		// this calls the update() function 60 FPS
@@ -113,12 +145,14 @@ app.bombchomp = {
 		app.draw.text(this.ctx, "... PAUSED ...", this.WIDTH/2, this.HEIGHT/2, 60, "white");
 		ctx.restore();
 	},
-	
-	
+		
 	drawSprites : function (){
+		//draw planet
+		this.planet.draw(this.ctx);
+		
 		this.player.draw(this.ctx); // the player knows how to draw itself
 		
-		//draw enemies
+		//draw bombs
 		for(var i=0; i < this.bombs.length; i++){
 			this.bombs[i].draw(this.ctx);
 		};
@@ -157,15 +191,15 @@ app.bombchomp = {
 			this.bombs[i].update(this.dt);
 		};
 		
-		//array filter() returns a new array with only active enemies
-		this.enemies = this.bombs.filter(function(bomb){
+		//array filter() returns a new array with only active bombs
+		this.bombs = this.bombs.filter(function(bomb){
 			return bomb.active;
 		});
 		
 		if(Math.random() < this.ENEMY_PROBABILITY_PER_SECOND/60){
 			this.bombs.push(new app.Bomb(this.bombImage,this.WIDTH, this.HEIGHT));
 			
-			console.log("New Enemy created! enemies.length = " + this.enemies.length);
+			console.log("New Enemy created! bombs.length = " + this.bombs.length);
 		}
 		
 		//Part C
@@ -184,15 +218,20 @@ app.bombchomp = {
 		// self will preserve "this" i.e. app.blastum
 		var self = this;
 				
-		//enemies v player
-		this.enemies.forEach(function(bomb){
-			if(self.collides(bomb, self.player)){
+		//bombs v player
+		this.bombs.forEach(function(bomb){
+			if(self.collides(bomb, self.player, true)){
 				bomb.explode();
-				//self.player.explode();
 				self.score += 5;
+			}else if(self.collides(bomb, self.planet, true)){
+				bomb.explode();
 				self.createExplosion(bomb.x,bomb.y,-bomb.xVelocity/4,-bomb.yVelocity/4);
+				app.planet.health--;
 			}
 		});
+		if(app.planet.health == 0){
+			this.gameState = this.GAME_STATE_OVER;
+		}
 	},
 	
 	/*
@@ -203,7 +242,19 @@ app.bombchomp = {
 	Java Interfaces to guarantee that.
 	*/
 	
-	collides: function(a,b){
+	collides: function(a,b,upperLeftAnchor){
+		if(!upperLeftAnchor){
+			//clone objects
+			var a = Object.create(a);
+			var b = Object.create(b);
+			
+			//move x,y
+			a.x -= a.width/2;
+			a.y -= a.height/2;
+			b.x -= b.width/2;
+			b.y -= b.height/2;
+		}
+		
 		return a.x < b.x + b.width && 
 		a.x + a.width > b.x && 
 		a.y < b.y + b.height &&
@@ -211,13 +262,8 @@ app.bombchomp = {
 	},//end collides
     
 	drawHUD: function(){
-		this.drawText("Score: " + this.score, 20, 20, 16,"#ddd");
-	},
-	
-	drawText: function(string, x, y, size, color) {
-			this.ctx.font = 'bold '+size+'px Monospace';
-			this.ctx.fillStyle = color;
-			this.ctx.fillText(string, x, y);
+		app.draw.text(this.ctx,"Score: " + this.score, 20, 20, 16,"#ddd");
+		app.draw.text(this.ctx,"Planet Health: " + app.planet.health, this.WIDTH - 200, 20, 16,"#ddd");
 	},
 	
 	//Part C

@@ -36,7 +36,7 @@ app.Bomb = function(){
 			ctx.fillStyle = this.color;
 			ctx.fillRect(this.x - halfW, this.y - halfH, this.width, this.height);
 		}else{
-			ctx.drawImage(this.image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+			ctx.drawImage(this.image, this.x, this.y, sourceWidth, sourceHeight);
 		}
 	};
 	

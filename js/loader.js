@@ -23,7 +23,8 @@ app.IMAGES = {
     bombImage: "images/Drone1.png",
 	explosionImage: "images/explosion.png",
 	explosionImage2: "images/explosion2.png",
-	explosionImage3: "images/explosion3.png"
+	planetImage: "images/planet.png",
+	spaceImage: "images/space.png"
  };
 
 
@@ -49,11 +50,13 @@ Modernizr.load(
 			'js/player.js',
 			'js/bomb.js',
 			'js/explosionSprite.js',
+			'js/planet.js',
 			app.IMAGES['playerImage'], // ignore console error
 			app.IMAGES['bombImage'], // ignore console error
 			app.IMAGES['explosionImage'],
 			app.IMAGES['explosionImage2'],
-			app.IMAGES['explosionImage3']
+			app.IMAGES['planetImage'],
+			app.IMAGES['spaceImage']
 		],
 		
 		// when the loading is complete, this function will be called

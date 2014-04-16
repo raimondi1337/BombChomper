@@ -16,7 +16,7 @@ app.draw = {
 	circle : function(ctx, x, y, r, col) {
 			ctx.fillStyle = col;
 			ctx.beginPath();
-			ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
+			ctx.arc(x, y, r, 0,  Math.PI, true);
 			ctx.closePath();
 			ctx.fill();
 	},
@@ -37,6 +37,21 @@ app.draw = {
 		// change this to fill entire ctx with gradient
 		ctx.fillStyle=grd;
 		ctx.fillRect(0,0,width,height);
-	}
-			
+	},
+	
+	start : function(ctx){
+		ctx.save();
+		this.rect(ctx,0,0,window.innerWidth, window.innerHeight, "rgba(100,100,100,1.0)");
+		this.text(ctx,"Bomb Chomper!", window.innerWidth*0.15, window.innerHeight*0.25, 72, "rgba(200,100,100,1.0)");
+		this.text(ctx,"Use the arrow keys to move and intercept the bombs.", window.innerWidth*0.15, window.innerHeight*0.40, 36, "rgba(200,100,100,1.0)");
+		this.text(ctx,"Don't let the bombs hit your home planet!", window.innerWidth*0.15, window.innerHeight*0.50, 36, "rgba(200,100,100,1.0)");
+		this.text(ctx,"Press any key to continue.", window.innerWidth*0.15, window.innerHeight*0.60, 36, "rgba(200,100,100,1.0)");
+		ctx.restore();
+	},
+	
+	gameover : function(ctx){
+		this.rect(ctx,0,0,window.innerWidth, window.innerHeight, "rgba(100,100,100,1.0)");
+		this.text(ctx,"Your Score is " + app.bombchomp.score, window.innerWidth*0.15, window.innerHeight*0.25, 72, "rgba(200,100,100,1.0)");
+		this.text(ctx,"Press any key to return to the main menu.", window.innerWidth*0.15, window.innerHeight*0.40, 36, "rgba(200,100,100,1.0)");
+	}		
 };

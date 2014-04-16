@@ -42,16 +42,22 @@ app.player = {
 			
 			ctx.restore();
 		} else{
-			ctx.drawImage(this.image, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+			ctx.save();
+			ctx.translate(this.x+halfW,this.y+halfH);
+			ctx.rotate(dtr(this.angle));
+							
+			ctx.drawImage(this.image,0-halfW,0-halfH, this.width, this.height);
+			
+			ctx.restore();
 		}
 	},
 	
 	moveLeft: function(dt){
-		this.angle -=2;
+		this.angle -=5;
 	},
 	
 	moveRight: function(dt){
-		this.angle +=2;
+		this.angle +=5;
 	},
 	
 	moveUp: function(dt){
@@ -69,6 +75,16 @@ app.player = {
 	},
 	
 	moveDown: function(dt){
-		//this.y += this.speed * dt;
+		var rotAsRad = dtr(this.angle -90);
+			
+		// second, find the x component of the change
+		var vx =  Math.cos(rotAsRad) * this.speed;
+		
+		// third, find the y component of the change
+		var vy =  Math.sin(rotAsRad) * this.speed;
+		
+		// update the x and y of the player
+		this.x -= vx * dt;
+		this.y -= vy * dt;
 	}
 };
