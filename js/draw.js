@@ -46,6 +46,7 @@ app.draw = {
 		this.text(ctx,"Use the arrow keys to move and intercept the bombs.", window.innerWidth*0.15, window.innerHeight*0.40, 36, "rgba(200,100,100,1.0)");
 		this.text(ctx,"Don't let the bombs hit your home planet!", window.innerWidth*0.15, window.innerHeight*0.50, 36, "rgba(200,100,100,1.0)");
 		this.text(ctx,"Press any key to continue.", window.innerWidth*0.15, window.innerHeight*0.60, 36, "rgba(200,100,100,1.0)");
+		this.text(ctx,"Created by: Dustin Raimondi and Rob Prorok", window.innerWidth*0.15, window.innerHeight*0.90, 28, "rgba(200,100,100,1.0)");
 		ctx.restore();
 	},
 	
