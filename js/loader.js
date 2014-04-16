@@ -97,14 +97,15 @@ Modernizr.load(
 			//Firefox and Opera will load "music.ogg"
 			//Browsers with MP3 support will load "music.mp3"
 			createjs.Sound.alternateExtensions = ["mp3"];
-			createjs.Sound.registerSound({id:"explosion", src:"sounds/fireball4.ogg"});
-			createjs.Sound.registerSound({id:"soundtrack", src:"sounds/soundtrack.ogg"});
+			createjs.Sound.registerSound({id:"explosion", src:"sounds/explode.mp3"});
+			createjs.Sound.registerSound({id:"loop", src:"sounds/loop.mp3"});
+			createjs.Sound.registerSound({id:"blip", src:"sounds/blip.mp3"});
 			
 			createjs.Sound.addEventListener("fileload", handleFileLoad);
 			
 			function handleFileLoad(e){
 				console.log("Preloaded Sound:", e.id, e.src);
-				if(e.src == "sounds/soundtrack.ogg") app.bombchomp.startSoundtrack();
+				if(e.src == "sounds/loop.mp3") app.bombchomp.startSoundtrack();
 			}
 			
 			// start game

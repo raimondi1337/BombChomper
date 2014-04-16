@@ -223,6 +223,7 @@ app.bombchomp = {
 			if(self.collides(bomb, self.player, true)){
 				bomb.explode();
 				self.score += 5;
+				createjs.Sound.play("blip", {volume:0.5});
 			}else if(self.collides(bomb, self.planet, true)){
 				bomb.explode();
 				self.createExplosion(bomb.x,bomb.y,-bomb.xVelocity/4,-bomb.yVelocity/4);
@@ -288,11 +289,11 @@ app.bombchomp = {
 		exp.xVelocity = xVelocity;
 		exp.yVelocity = yVelocity;
 		this.explosions.push(exp);
-		createjs.Sound.play("explosion");
+		createjs.Sound.play("explosion", {volume:0.5});
 	},
 	
 	startSoundtrack: function(){
 		createjs.Sound.stop();
-		createjs.Sound.play("soundtrack", {loop:-1, volume:0.5});
+		createjs.Sound.play("loop", {loop:-1, volume:0.2});
 	},
 };
