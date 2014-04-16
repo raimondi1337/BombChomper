@@ -80,11 +80,14 @@ app.bombchomp = {
 			
 			window.addEventListener('keydown', function(event){
 				if(game.gamestate == game.GAME_STATE_BEGIN){
-					console.log(game.gamestate);
-					game.gamestate = game.GAME_STATE_PLAYING;
+					window.setTimeout(function(){
+						game.gamestate = game.GAME_STATE_PLAYING;
+					}, 1000);
 				}
 				if(game.gamestate == game.GAME_STATE_OVER){
-					game.gamestate = game.GAME_STATE_BEGIN;
+					window.setTimeout(function(){
+						game.gamestate = game.GAME_STATE_BEGIN;
+					}, 1000);
 				}
 			});
 			
@@ -98,7 +101,7 @@ app.bombchomp = {
 		app.draw.clear(this.ctx,0,0,this.WIDTH,this.HEIGHT);
 		// PAUSED?
 		if (app.paused){
-			this.drawPauseScreen(this.ctx);
+			app.draw.paused(this.ctx);
 			return;
 		 }
 	
@@ -106,13 +109,13 @@ app.bombchomp = {
 		// DRAW	
 		if(this.gamestate == this.GAME_STATE_BEGIN){
 			app.draw.start(this.ctx);
+			app.planet.health = 10;
+			this.score = 0;
+			this.bombs = [];
 		} // end if
 		
 		if(this.gamestate == this.GAME_STATE_OVER){
 			app.draw.gameover(this.ctx);
-			app.planet.health = 10;
-			this.score = 0;
-			this.bombs = [];
 		} // end 
 		
 		if(this.gamestate == this.GAME_STATE_PLAYING){
@@ -135,15 +138,6 @@ app.bombchomp = {
 		// this calls the update() function 60 FPS
 		// what happens is we don't use bind?
 		app.animationID = requestAnimationFrame(this.update.bind(this));
-	},
-	
-	drawPauseScreen: function(ctx){
-		ctx.save();
-		app.draw.backgroundGradient(this.ctx,this.WIDTH,this.HEIGHT);
-		ctx.textAlign = "center";
-		ctx.textBaseline = "middle";
-		app.draw.text(this.ctx, "... PAUSED ...", this.WIDTH/2, this.HEIGHT/2, 60, "white");
-		ctx.restore();
 	},
 		
 	drawSprites : function (){

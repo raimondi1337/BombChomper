@@ -53,5 +53,10 @@ app.draw = {
 		this.rect(ctx,0,0,window.innerWidth, window.innerHeight, "rgba(100,100,100,1.0)");
 		this.text(ctx,"Your Score is " + app.bombchomp.score, window.innerWidth*0.15, window.innerHeight*0.25, 72, "rgba(200,100,100,1.0)");
 		this.text(ctx,"Press any key to return to the main menu.", window.innerWidth*0.15, window.innerHeight*0.40, 36, "rgba(200,100,100,1.0)");
+	},
+
+	paused : function(ctx){
+		this.rect(ctx,0,0,window.innerWidth, window.innerHeight, "rgba(100,100,100,1.0)");
+		this.text(ctx,"PAUSED", window.innerWidth*0.15, window.innerHeight*0.25, 72, "rgba(200,100,100,1.0)");
 	}		
 };
